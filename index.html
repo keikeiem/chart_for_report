@@ -1,0 +1,62 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Chart Loading Page</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type=text/javascript>
+		$(document).ready(function() {
+			var fileInput = $("#fileInput").get(0);
+			fileInput.addEventListener("change",
+			//change eventListener start
+			function(e) {
+            	fileContent = "";
+            	var filee = fileInput.files[0];
+            	var textType = /text.*/;
+				console.log(textType);
+            	// if (filee.type.match(textType)) {
+                	var reader = new FileReader();
+
+	                reader.onload = function(e) {
+						console.log(e);
+						console.log(reader.result);
+						$("#chk").html(reader.result);
+
+						var test = reader.result;
+						test = test.split('\n');
+						if (!test[test.length - 1]) {
+							test.splice(test.length - 1, 1);
+						}
+
+						var result = [];
+						for (var i = 0; i < test.length; i++) {
+							var rowData = test[i].split(',');
+							rowData = makeElementNumber(rowData);
+							result[i] = [];
+							result[i][0] = 'number_' + i;
+							for (var j = 0; j < rowData.length; j++) {
+								result[i].push(rowData[j]);
+							}
+						}
+						console.log(result);
+					}
+                	reader.readAsText(filee, "UTF-8");
+            	// } else {
+                // 	$("#chk").html("File not supported");
+            	// }
+        	});
+        	//change eventListener end
+		}); //END OF READY
+
+		function makeElementNumber(array) {
+			for (var i = 0; i < array.length; i++) {
+				array[i] = Number(array[i]);
+			}
+			return array;
+		}
+	</script>
+</head>
+<body>
+	<input type="file" id="fileInput">
+    <div id="chk"></div>
+</body>
+</html>
